@@ -7,7 +7,7 @@ from common.agents.astar_algo import get_next_move_to_target, find_safest_path
 SCIPERS = ["380451", "445566"]
 
 class Agent(BaseAgent):
-    def __init__(self, nickname, network, logger="client.agent"):
+    def __init__(self, nickname, network, logger="client.agent", timeout=None):
         super().__init__(nickname, network, logger)
         # Initialize state tracking
         self.target = None
@@ -17,6 +17,7 @@ class Agent(BaseAgent):
         self.last_position = None
         self.delivery_mode = False
         self.stuck_detection_window = 10
+        self.timeout = timeout
         
         # Enhanced tracking for tactical play
         self.passenger_memory = {}  # Remember passenger values at positions

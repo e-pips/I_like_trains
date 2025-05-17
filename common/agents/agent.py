@@ -16,13 +16,14 @@ class Agent(BaseAgent):
     3. High-value zone tracking for optimized collection
     4. Blocked zone tracking to avoid problematic areas
     """
-    def __init__(self, nickname, network, logger="client.agent"):
+    def __init__(self, nickname, network, logger="client.agent", timeout=None):
         super().__init__(nickname, network, logger)
         self.target = None
         self.path = []
         self.stuck_counter = 0
         self.last_position = None
         self.delivery_mode = False
+        self.timeout = timeout
         
         # Fixed parameters for optimal performance
         self.max_preferred_wagons = 3
