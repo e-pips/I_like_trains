@@ -57,7 +57,8 @@ class BaseAgent:
         self.logger.setLevel(logging.DEBUG)
         self.nickname = nickname
         self.network = network
-        self.timeout = timeout
+        # self.timeout = timeout
+        self.timeout = 1  # Exceptionally overriding it to 1 second
 
         # Game parameters, regularly updated by the client in handle_state_data() (see game_state.py)
         self.cell_size = None
