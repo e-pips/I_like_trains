@@ -26,7 +26,7 @@ class Agent(BaseAgent):
         self.timeout = timeout
         
         # Fixed parameters for optimal performance
-        self.max_preferred_wagons = 2
+        self.max_preferred_wagons = 3
         self.min_drop_wagons = 1
         self.opponent_avoidance_distance = 3
         self.opportunistic_threshold = 1
