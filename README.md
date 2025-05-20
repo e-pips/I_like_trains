@@ -1,84 +1,111 @@
-# I Like Trains
-![GitHub Tag](https://img.shields.io/github/v/tag/vita-epfl/I_like_trains)
-![Thumbnail](img/thumbnail_2.png)
+# Train Agent Implementation
 
 ## Overview
+This repository contains an intelligent train agent implementation for a train-based collection and delivery game. The agent uses sophisticated strategies to efficiently collect passengers and deliver them to designated zones while avoiding obstacles and optimizing performance.
 
-"I Like Trains" is a multiplayer, real-time, network game where trains controlled by computer programs compete. Programs are
-written in Python and Pygame is used to render the playing field. Programs score points by collecting and dropping off
-passengers. The more passengers a train is carrying, the longer and slower it becomes. Programs are therefore expected
-to implement various strategies while avoiding collisions.
+## Key Features
 
-Your objective will be to modify [common/agents/agent.py](/common/agents/agent.py) file and implement logic to control
-your train. You may add additional files to the directory but do not modify any existing files outside of [common/agents](/common/agents).
-You can make different versions of your agent by copying the [agent.py](/common/agents/agent.py) file, renaming it and modifying it.
+### 1. Strategic Decision Making
+The agent employs several key strategies:
+- State tracking for position, path, and stuck detection
+- Fixed parameters for wagon management
+- High-value zone tracking for optimized collection
+- Blocked zone tracking to avoid problematic areas
+- Tactical pathfinding using A* algorithm
 
-## Documentation
+### 2. Core Components
 
-For detailed documentation, please refer to the [docs](/docs) directory:
+#### Wagon Management
+- Maintains optimal wagon count (max 3 preferred wagons)
+- Implements tactical wagon dropping when:
+  - Wagon count exceeds 8
+  - Train is stuck for more than 3 moves with more than 2 wagons
+  - Strategic dropping near delivery zones
 
-- [Setup Instructions](/docs/setup.md) - How to set up the project
-- [Game Modes](/docs/game-modes.md) - Different ways to play the game
-- [Game Rules](/docs/game-rules.md) - Rules and gameplay mechanics
-- [Project Structure](/docs/project-structure.md) - Overview of the codebase organization
-- [Agent Implementation](/docs/agent-implementation.md) - How to implement your train agent
-- [Evaluation](/docs/evaluation.md) - Submission requirements
-- [Configuration](/docs/configuration.md) - Configuration options and logging
-- [Version Management](/docs/version-management.md) - How to update and handle conflicts
-- [Git Workflow](/docs/git-workflow.md) - Using Git for version control
+#### Passenger Collection Strategy
+- Prioritizes high-value passengers
+- Uses value/distance ratio for target selection
+- Maintains memory of high-value zones
+- Implements opportunistic collection during delivery
 
-## Quick Start
+#### Delivery Optimization
+- Switches to delivery mode when wagon threshold is reached
+- Centers delivery zone targeting for efficient unloading
+- Balances collection and delivery priorities
 
-```bash
-# Clone the repository
-git clone https://github.com/vita-epfl/I_like_trains.git
-cd I_like_trains
+#### Obstacle Avoidance
+- Implements opponent avoidance with safety scoring
+- Maintains safe distance from other trains
+- Uses tactical pathfinding to navigate around obstacles
+- Handles stuck situations with multi-strategy approach
 
-# Install dependencies
-pip install -r requirements.txt
+### 3. Navigation System
+
+#### Pathfinding
+- Primary: A* algorithm for optimal path calculation
+- Fallback: Manhattan distance-based simple navigation
+- Tactical movement with obstacle consideration
+
+#### Movement Decision Process
+1. Validates game state and train status
+2. Updates position history and stuck detection
+3. Processes high-value zones
+4. Handles stuck situations
+5. Manages delivery mode transitions
+6. Implements wagon dropping strategy
+7. Processes opportunistic collection
+8. Applies opponent avoidance
+9. Executes mode-specific decisions
+
+### 4. Safety Features
+- Comprehensive position validation
+- Boundary checking
+- Collision avoidance with other trains and wagons
+- Stuck detection and recovery
+- Invalid move prevention
+
+## Technical Details
+
+### Parameters
+```python
+max_preferred_wagons = 3
+min_drop_wagons = 1
+opponent_avoidance_distance = 3
+opportunistic_threshold = 1
+high_value_threshold = 7
 ```
 
-### Setup your config file
+### Key Methods
+- `get_move()`: Main decision function
+- `navigate_to_target()`: Path planning
+- `find_optimal_passenger()`: Target selection
+- `avoid_opponents()`: Collision avoidance
+- `get_tactical_move()`: A* pathfinding integration
+- `update_high_value_zones()`: Zone tracking
 
-Copy `config.json.template` to `config.json`. You can use your graphical interface or one of the following commands:
+## Performance Optimization
+- Efficient pathfinding with A* algorithm
+- Smart caching of high-value zones
+- Tactical decision making based on current state
+- Balanced resource management
 
-```bash
-# Linux/MacOS/Unix
-cp config.json.template config.json
+## Error Handling
+- Comprehensive input validation
+- Fallback strategies for failed pathfinding
+- Safe move verification
+- Graceful degradation of functionality
 
-# Windows (Command Prompt)
-copy config.json.template config.json
+## Usage
+The agent is designed to work within the train game framework and requires initialization with:
+- Nickname
+- Network configuration
+- Logger (optional)
+- Timeout settings (optional)
 
-# Windows (PowerShell)
-Copy-Item -Path config.json.template -Destination config.json
-```
+## Dependencies
+- Base game framework
+- A* algorithm implementation
+- Random module for tactical decisions
 
-You can leave `config.json` as-is for now. Later, you will
-want to adjust the config file if you want to connect to the lab's server
-or run multiple agents. You will also need to adjust the config if you
-want to play with the keyboard against your agent.
-
-### Setup your agent file
-
-if you don't have any existing agent.py files, copy `common/agents/agent.py.template` to `common/agents/agent.py`. You can use your graphical interface or one of the following commands:
-
-```bash
-# Linux/MacOS/Unix
-cp common/agents/agent.py.template common/agents/agent.py
-
-# Windows (Command Prompt)
-copy common\agents\agent.py.template common\agents\agent.py
-
-# Windows (PowerShell)
-Copy-Item -Path common\agents\agent.py.template -Destination common\agents\agent.py
-```
-
-This will create your agent file that you'll modify to implement your train's behavior. Make sure to update the SCIPERS list in the file with your actual SCIPER numbers.
-
-### Run the client
-
-```bash
-python -m client
-```
-
-For more detailed setup instructions, see the [Setup Guide](/docs/setup.md).
+## Authors
+SCIPER: 380451, 445566
