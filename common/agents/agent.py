@@ -4,7 +4,7 @@ from common.move import Move
 from common.agents.astar_algo import get_next_move_to_target
 
 # Student scipers - replace with your actual SCIPER numbers
-SCIPERS = ["380451", "445566"]
+SCIPERS = ["380451", "391556"]
 
 class Agent(BaseAgent):
     """
